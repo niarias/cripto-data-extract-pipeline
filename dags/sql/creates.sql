@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS fact_crypto_trading (
 COMPOUND SORTKEY(coin_id, exchange_id, date);
 
 
-CREATE TABLE IF NOT EXISTS stg_crypto_trading (
+CREATE TABLE IF NOT EXISTS fact_crypto_trading_stg (
     trading_id VARCHAR(100) PRIMARY KEY,
     coin_id INT NOT NULL,
     exchange_id INT NOT NULL,
@@ -58,7 +58,7 @@ SORTKEY(date);
 
 
 
-CREATE TABLE IF NOT EXISTS stg_dim_dates (
+CREATE TABLE IF NOT EXISTS dim_dates_stg (
     date VARCHAR(100) PRIMARY KEY,
     day INT NOT NULL,
     month INT NOT NULL,

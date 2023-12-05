@@ -1,0 +1,150 @@
+[2023-12-05T20:26:46.874+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: extract_dag.create_tables manual__2023-12-05T20:26:46.073708+00:00 [queued]>
+[2023-12-05T20:26:46.881+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: extract_dag.create_tables manual__2023-12-05T20:26:46.073708+00:00 [queued]>
+[2023-12-05T20:26:46.882+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 2
+[2023-12-05T20:26:46.899+0000] {taskinstance.py:1382} INFO - Executing <Task(PostgresOperator): create_tables> on 2023-12-05 20:26:46.073708+00:00
+[2023-12-05T20:26:46.904+0000] {standard_task_runner.py:57} INFO - Started process 3238 to run task
+[2023-12-05T20:26:46.911+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'extract_dag', 'create_tables', 'manual__2023-12-05T20:26:46.073708+00:00', '--job-id', '23', '--raw', '--subdir', 'DAGS_FOLDER/dag_extract.py', '--cfg-path', '/tmp/tmpyi0x625p']
+[2023-12-05T20:26:46.920+0000] {standard_task_runner.py:85} INFO - Job 23: Subtask create_tables
+[2023-12-05T20:26:46.986+0000] {task_command.py:416} INFO - Running <TaskInstance: extract_dag.create_tables manual__2023-12-05T20:26:46.073708+00:00 [running]> on host d4f23c87a93c
+[2023-12-05T20:26:47.052+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='extract_dag' AIRFLOW_CTX_TASK_ID='create_tables' AIRFLOW_CTX_EXECUTION_DATE='2023-12-05T20:26:46.073708+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2023-12-05T20:26:46.073708+00:00'
+[2023-12-05T20:26:47.054+0000] {sql.py:274} INFO - Executing: CREATE TABLE IF NOT EXISTS dim_coins (
+    coin_id INT IDENTITY(1,1) PRIMARY KEY,
+    ticker VARCHAR(10) NOT NULL,
+    name VARCHAR(50) NOT NULL
+)
+DISTSTYLE ALL 
+SORTKEY(ticker);
+
+CREATE TABLE IF NOT EXISTS dim_exchanges (
+    exchange_id INT IDENTITY(1,1) PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    url VARCHAR(100) NOT NULL
+) 
+DISTSTYLE ALL
+SORTKEY(name);
+
+
+CREATE TABLE IF NOT EXISTS fact_crypto_trading (
+    trading_id VARCHAR(100) PRIMARY KEY,
+    coin_id INT NOT NULL,
+    exchange_id INT NOT NULL,
+    date VARCHAR(30) NOT NULL DISTKEY,
+    time VARCHAR(30) NOT NULL,
+    qty_low FLOAT NOT NULL,
+    high FLOAT NOT NULL,
+    low FLOAT NOT NULL,
+    qty_high FLOAT NOT NULL,
+    volume FLOAT NOT NULL,
+    exchange_trade_id VARCHAR(100) NOT NULL
+)
+COMPOUND SORTKEY(coin_id, exchange_id, date);
+
+
+CREATE TABLE IF NOT EXISTS fact_crypto_trading_stg (
+    trading_id VARCHAR(100) PRIMARY KEY,
+    coin_id INT NOT NULL,
+    exchange_id INT NOT NULL,
+    date VARCHAR(30) NOT NULL DISTKEY,
+    time VARCHAR(30) NOT NULL,
+    qty_low FLOAT NOT NULL,
+    high FLOAT NOT NULL,
+    low FLOAT NOT NULL,
+    qty_high FLOAT NOT NULL,
+    volume FLOAT NOT NULL,
+    exchange_trade_id VARCHAR(100) NOT NULL
+)
+COMPOUND SORTKEY(coin_id, exchange_id, date);
+
+
+CREATE TABLE IF NOT EXISTS dim_date (
+    date VARCHAR(100) PRIMARY KEY,
+    day INT NOT NULL,
+    month INT NOT NULL,
+    year INT NOT NULL
+)
+DISTSTYLE ALL 
+SORTKEY(date);
+
+
+
+CREATE TABLE IF NOT EXISTS dim_dates_stg (
+    date VARCHAR(100) PRIMARY KEY,
+    day INT NOT NULL,
+    month INT NOT NULL,
+    year INT NOT NULL
+)
+DISTSTYLE ALL 
+SORTKEY(date);
+[2023-12-05T20:26:47.064+0000] {base.py:73} INFO - Using connection ID 'redshift_conn_1' for task execution.
+[2023-12-05T20:26:47.076+0000] {base.py:73} INFO - Using connection ID 'redshift_conn_1' for task execution.
+[2023-12-05T20:26:48.383+0000] {sql.py:418} INFO - Running statement: CREATE TABLE IF NOT EXISTS dim_coins (
+    coin_id INT IDENTITY(1,1) PRIMARY KEY,
+    ticker VARCHAR(10) NOT NULL,
+    name VARCHAR(50) NOT NULL
+)
+DISTSTYLE ALL 
+SORTKEY(ticker);
+
+CREATE TABLE IF NOT EXISTS dim_exchanges (
+    exchange_id INT IDENTITY(1,1) PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    url VARCHAR(100) NOT NULL
+) 
+DISTSTYLE ALL
+SORTKEY(name);
+
+
+CREATE TABLE IF NOT EXISTS fact_crypto_trading (
+    trading_id VARCHAR(100) PRIMARY KEY,
+    coin_id INT NOT NULL,
+    exchange_id INT NOT NULL,
+    date VARCHAR(30) NOT NULL DISTKEY,
+    time VARCHAR(30) NOT NULL,
+    qty_low FLOAT NOT NULL,
+    high FLOAT NOT NULL,
+    low FLOAT NOT NULL,
+    qty_high FLOAT NOT NULL,
+    volume FLOAT NOT NULL,
+    exchange_trade_id VARCHAR(100) NOT NULL
+)
+COMPOUND SORTKEY(coin_id, exchange_id, date);
+
+
+CREATE TABLE IF NOT EXISTS fact_crypto_trading_stg (
+    trading_id VARCHAR(100) PRIMARY KEY,
+    coin_id INT NOT NULL,
+    exchange_id INT NOT NULL,
+    date VARCHAR(30) NOT NULL DISTKEY,
+    time VARCHAR(30) NOT NULL,
+    qty_low FLOAT NOT NULL,
+    high FLOAT NOT NULL,
+    low FLOAT NOT NULL,
+    qty_high FLOAT NOT NULL,
+    volume FLOAT NOT NULL,
+    exchange_trade_id VARCHAR(100) NOT NULL
+)
+COMPOUND SORTKEY(coin_id, exchange_id, date);
+
+
+CREATE TABLE IF NOT EXISTS dim_date (
+    date VARCHAR(100) PRIMARY KEY,
+    day INT NOT NULL,
+    month INT NOT NULL,
+    year INT NOT NULL
+)
+DISTSTYLE ALL 
+SORTKEY(date);
+
+
+
+CREATE TABLE IF NOT EXISTS dim_dates_stg (
+    date VARCHAR(100) PRIMARY KEY,
+    day INT NOT NULL,
+    month INT NOT NULL,
+    year INT NOT NULL
+)
+DISTSTYLE ALL 
+SORTKEY(date);, parameters: None
+[2023-12-05T20:26:48.940+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=extract_dag, task_id=create_tables, execution_date=20231205T202646, start_date=20231205T202646, end_date=20231205T202648
+[2023-12-05T20:26:48.995+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2023-12-05T20:26:49.016+0000] {taskinstance.py:2778} INFO - 1 downstream tasks scheduled from follow-on schedule check
