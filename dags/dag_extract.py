@@ -5,6 +5,7 @@ from scripts.binance import get_binance_pairs, get_24hr_ticker
 # Importar DummyOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
+from scripts.main import load_measurements_data
 
 with DAG(
     dag_id="extract_dag",
@@ -36,6 +37,14 @@ with DAG(
         python_callable=get_binance_pairs,
         op_kwargs={
             "whitelist": ["BTC", "USDT"]
+        }
+    )
+
+    load_measurements_data_task = PythonOperator(
+        task_id="load_measurements_data",
+        python_callable=load_measurements_data,
+        op_kwargs={
+            "config_file": "/opt/airflow/config/config.ini"
         }
     )
 
