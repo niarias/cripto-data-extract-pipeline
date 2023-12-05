@@ -1,20 +1,3 @@
-CREATE TABLE IF NOT EXISTS dim_coins (
-    coin_id INT IDENTITY(1,1) PRIMARY KEY,
-    ticker VARCHAR(10) NOT NULL,
-    name VARCHAR(50) NOT NULL
-)
-DISTSTYLE ALL 
-SORTKEY(ticker);
-
-CREATE TABLE IF NOT EXISTS dim_exchanges (
-    exchange_id INT IDENTITY(1,1) PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    url VARCHAR(100) NOT NULL
-) 
-DISTSTYLE ALL
-SORTKEY(name);
-
-
 CREATE TABLE IF NOT EXISTS fact_crypto_trading (
     trading_id VARCHAR(100) PRIMARY KEY,
     coin_id INT NOT NULL,
@@ -47,7 +30,7 @@ CREATE TABLE IF NOT EXISTS fact_crypto_trading_stg (
 COMPOUND SORTKEY(coin_id, exchange_id, date);
 
 
-CREATE TABLE IF NOT EXISTS dim_date (
+CREATE TABLE IF NOT EXISTS dim_dates (
     date VARCHAR(100) PRIMARY KEY,
     day INT NOT NULL,
     month INT NOT NULL,
